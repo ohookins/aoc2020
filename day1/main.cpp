@@ -41,7 +41,7 @@ void readInput()
     ifs.close();
 }
 
-void compareValues()
+void part1Solution()
 {
     for (int value : ValueVector)
     {
@@ -51,16 +51,38 @@ void compareValues()
         if (ValueSet.count(requiredNumber) == 1)
         {
             int answer = value * requiredNumber;
-            std::cout << "Answer is: " << answer << std::endl;
+            std::cout << "Part 1 answer is: " << answer << std::endl;
             return;
         }
     }
 
-    std::cout << "Could not find a valid answer." << std::endl;
+    std::cout << "Could not find a valid answer for part 1." << std::endl;
+}
+
+void part2Solution()
+{
+    // N^2, this is not great.
+    for (int x : ValueVector)
+    {
+        for (int y : ValueVector)
+        {
+            int requiredNumber = MAGIC_NUM - x - y;
+
+            if (ValueSet.count(requiredNumber) == 1)
+            {
+                int answer = x * y * requiredNumber;
+                std::cout << "Part 2 answer is: " << answer << std::endl;
+                return;
+            }
+        }
+    }
+
+    std::cout << "Could not find a valid answer for part 2." << std::endl;
 }
 
 int main(int argc, char** argv)
 {
     readInput();
-    compareValues();
+    part1Solution();
+    part2Solution();
 }
