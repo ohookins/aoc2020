@@ -65,7 +65,7 @@ void readInput()
     ifs.close();
 }
 
-void validatePasswords()
+void validatePasswordsPart1()
 {
     int numValidPasswords = 0;
 
@@ -85,11 +85,34 @@ void validatePasswords()
         }
     }
 
-    std::cout << "The number of valid passwords is " << numValidPasswords << std::endl;   
+    std::cout << "Part1 valid passwords is " << numValidPasswords << std::endl;   
+}
+
+void validatePasswordsPart2()
+{
+    int numValidPasswords = 0;
+
+    for (auto Password : Passwords)
+    {
+        // these are indexed from 1, so adjust them
+        int Position1 = Password.Min - 1;
+        int Position2 = Password.Max - 1;
+
+        // only one position can be filled, which means effectively XOR
+        if (
+            Password.Password[Position1] == Password.Letter ^
+            Password.Password[Position2] == Password.Letter)
+        {
+            numValidPasswords++;
+        }
+    }
+
+    std::cout << "Part2 valid passwords is " << numValidPasswords << std::endl;   
 }
 
 int main(int argc, char** argv)
 {
     readInput();
-    validatePasswords();
+    validatePasswordsPart1();
+    validatePasswordsPart2();
 }
