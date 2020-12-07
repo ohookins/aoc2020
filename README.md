@@ -1,2 +1,17 @@
 # aoc2020
 Advent Of Code 2020
+
+## Implementation
+
+C++11 with the occasional C++17 trivial feature like initialized class
+members using vectors in the class definition.
+
+## Learnings
+
+Here I'm listing anything I discover along the way that would ideally
+result in refactors or simplifications in previous solutions.
+
+- `std::ifstream` has a `getline` function. I've used `get` with individual
+  characters for the first few days.
+- Need to check that I've used `match[1].str()` everywhere necessary. Otherwise
+  strange things appear to happen.
