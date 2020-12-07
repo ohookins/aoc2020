@@ -84,14 +84,6 @@ bool PassIDProperty::IsValid() const
     return std::regex_match(ID, IDRE);
 }
 
-Passport::Passport()
-{
-    // this should be possible to initialize in the header in C++17 but
-    // I haven't managed to figure out the correct compiler incantation
-    // in VSCode to get it working.
-    MandatoryProperties = {"byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"};
-}
-
 bool Passport::IsValid(bool strictMode) const
 {
     for (auto PropCode : MandatoryProperties)

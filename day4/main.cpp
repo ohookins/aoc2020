@@ -4,6 +4,7 @@
 #include <map>
 #include <regex>
 #include <string>
+#include <filesystem>
 
 #include "passport.h"
 
@@ -48,6 +49,12 @@ void readInput()
 {
     std::ifstream ifs;
     ifs.open(INPUT_FILENAME);
+
+    if (ifs.fail())
+    {
+        std::cout << std::filesystem::current_path() << std::endl;
+        throw("Failed to open input file");
+    }
 
     while (!ifs.eof())
     {
@@ -105,14 +112,18 @@ void validatePassports()
     int numLooselyValidPassports = 0;
     int numStrictlyValidPassports = 0;
 
+    int totalPassports = 0;
+
     for (auto CurrentPassport : Passports)
     {
+        totalPassports++;
         CurrentPassport.IsValid(false) && numLooselyValidPassports++;
         CurrentPassport.IsValid(true) && numStrictlyValidPassports++;
     }
 
     std::cout << "Number of non-strict valid passports is: " << numLooselyValidPassports << std::endl;
     std::cout << "Number of strictly valid passports is: " << numStrictlyValidPassports << std::endl;
+    std::cout << "Total: " << totalPassports << std::endl;
 }
 
 int main(int argc, char** argv)

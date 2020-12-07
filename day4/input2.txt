@@ -1,0 +1,8 @@
+byr:1959
+hgt:169cm hcl:#7d3b0c ecl:gry eyr:2028 cid:107 pid:584790749
+
+byr:1923
+cid:309
+hcl:#a97842
+pid:740105085 iyr:2020
+hgt:188cm ecl:oth eyr:2029

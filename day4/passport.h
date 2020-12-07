@@ -90,11 +90,9 @@ private:
 class Passport
 {
 private:
-    std::vector<std::string> MandatoryProperties;
+    static const inline std::vector<std::string> MandatoryProperties{"byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"};
 
 public:
-    Passport();
-
     // This doesn't feel right. I want to make a set or vector of
     // properties but can't think of an elegant way to evaluate them
     // all and figure out the end result of whether we have all of them
