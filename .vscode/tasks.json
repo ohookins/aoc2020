@@ -2,7 +2,7 @@
     "tasks": [
         {
             "type": "cppbuild",
-            "label": "C++: build active file with clang++",
+            "label": "C++: debug build active file with clang++",
             "command": "/usr/bin/clang++",
             "args": [
                 "-std=c++17",
@@ -21,7 +21,29 @@
                 "kind": "build",
                 "isDefault": true
             },
-            "detail": "This should work but doesn't"
+            "detail": "Debug build"
+        },
+        {
+            "type": "cppbuild",
+            "label": "C++: build active file with clang++",
+            "command": "/usr/bin/clang++",
+            "args": [
+                "-std=c++17",
+                "${fileDirname}/*.cpp",
+                "-o",
+                "${fileDirname}/${fileBasenameNoExtension}"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "Non-debug build"
         }
     ],
     "version": "2.0.0"
