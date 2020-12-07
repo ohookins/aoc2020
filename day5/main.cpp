@@ -3,6 +3,7 @@
 #include <string>
 #include <filesystem>
 #include <vector>
+#include <algorithm>
 
 const std::string INPUT_FILENAME = "input.txt";
 
@@ -29,9 +30,9 @@ void readInput()
     }
 }
 
-void decodePasses()
+std::vector<int> decodePasses()
 {
-    int greatestPassNumber = 0;
+    std::vector<int> seatIDs;
 
     for (auto Pass : BoardingPasses)
     {
@@ -61,17 +62,40 @@ void decodePasses()
         }
 
         int seatID = row * 8 + col;
-        if (seatID > greatestPassNumber)
-        {
-            greatestPassNumber = seatID;
-        }
+        seatIDs.push_back(seatID);
     }
 
-    std::cout << "Greatest pass number is " << greatestPassNumber << std::endl;
+    return seatIDs;
 }
+
+void findMySeat(std::vector<int> seatIDs)
+{
+    // sort
+    std::sort(seatIDs.begin(), seatIDs.end());
+
+    // part 1 output
+    std::cout << "Greatest pass number is " << seatIDs.at(seatIDs.size()-1) << std::endl;
+
+    // part 2 - find a gap in the IDs
+    int previousSeatID = seatIDs.at(0);
+    for (auto seatID : seatIDs)
+    {
+        if (seatID > previousSeatID + 1)
+        {
+            std::cout << "My seat ID is " << (seatID - 1) << std::endl;
+            return;
+        }
+
+        previousSeatID = seatID;
+    }
+}
+
 
 int main(int argc, char** argv)
 {
     readInput();
-    decodePasses();
+
+    std::vector<int> seatIDs = decodePasses();
+
+    findMySeat(seatIDs);
 }
