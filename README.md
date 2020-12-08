@@ -20,3 +20,6 @@ result in refactors or simplifications in previous solutions.
   directory.
 - I've been extremely inconsistent in naming, in particular starting with a capital
   or not. Should figure out my linting story.
+- When deleting values from a data structure we're iterating through, do the
+  dance of moving the iterator properly over the deleted value and onto the next
+  one rather than breaking out of the loop and starting iteration again.
