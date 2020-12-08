@@ -18,3 +18,5 @@ result in refactors or simplifications in previous solutions.
 - Need to check whether input stream is open with `ifs.fail()` as the cwd when
   run from within VSCode seems to be the workspace rather than the current file
   directory.
+- I've been extremely inconsistent in naming, in particular starting with a capital
+  or not. Should figure out my linting story.
