@@ -6,6 +6,7 @@
 #include <algorithm>
 
 const std::string INPUT_FILENAME = "input.txt";
+const int RING_BUFFER_SIZE = 25;
 
 // temporary storage because I don't want to drive everything off readInput.
 // Numbers are definitely bigger than 32 bit.
@@ -13,14 +14,13 @@ std::vector<int64_t> Numbers;
 
 struct Ring
 {
-    int64_t Buffer [25];
+    int64_t Buffer [RING_BUFFER_SIZE];
     int Position;
 
     void Push(int64_t Num)
     {
         Buffer[Position] = Num;
-        // this is stupid
-        Position = (Position+1) % (sizeof(Buffer) / sizeof(int64_t));
+        Position = (Position+1) % RING_BUFFER_SIZE;
     }
 } NumberRing;
 
@@ -105,7 +105,7 @@ void printLowestAndHighestInRange(int Back, int Front)
 
     std::sort(Range.begin(), Range.end());
 
-    std::cout << "Encryption weakness sum is " << Range.front() << "+" << Range.back() << " = " << Range.front() + Range.back() << std::endl;
+    std::cout << "Encryption weakness sum is " << Range.front() << " + " << Range.back() << " = " << Range.front() + Range.back() << std::endl;
 }
 
 // Find the contiguous range of numbers in the original number list
