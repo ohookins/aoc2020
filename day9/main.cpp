@@ -3,6 +3,7 @@
 #include <string>
 #include <filesystem>
 #include <vector>
+#include <algorithm>
 
 const std::string INPUT_FILENAME = "input.txt";
 
@@ -95,9 +96,71 @@ int64_t findFirstInvalidNumber()
     return 0;
 }
 
+void printLowestAndHighestInRange(int Back, int Front)
+{
+    // This is interesting but I'm not sure if there's a better way.
+    std::vector<int64_t>::const_iterator First = Numbers.begin() + Back;
+    std::vector<int64_t>::const_iterator Last = Numbers.begin() + Front;
+    std::vector<int64_t> Range(First, Last);
+
+    std::sort(Range.begin(), Range.end());
+
+    std::cout << "Encryption weakness sum is " << Range.front() << "+" << Range.back() << " = " << Range.front() + Range.back() << std::endl;
+}
+
+// Find the contiguous range of numbers in the original number list
+// that add up to the invalid number. I think this can be done by
+// having a moving range over the vector, moving the front of the
+// range until the sum is greater than the number, and then moving
+// the back of the range until the sum is less than the number.
+void findInvalidNumberComponents(int64_t InvalidNum)
+{
+    int Front = 1; // has to be at least two numbers
+    int Back = 0;
+
+    // Loop until the front of the range goes over the end of the vector
+    while (Front < Numbers.size())
+    {
+        // Sum the range of numbers
+        int64_t Sum = 0;
+        for (int i = Back; i <= Front; i++)
+        {
+            Sum += Numbers[i];
+        }
+
+        // If the Sum is lower than the InvalidNum, the front should be
+        // moved one place forward.
+        if (Sum < InvalidNum)
+        {
+            Front++;
+            continue;
+        }
+
+        // If the Sum is higher than the InvalidNum, the back should be
+        // moved one place forward. Although this seems intuitive if the
+        // list of numbers is sorted in ascending order, it is not. Although,
+        // the trend is increasing, so it feels right.
+        if (Sum > InvalidNum)
+        {
+            Back++;
+            continue;
+        }
+
+        // If the Sum is equal to the InvalidNum, we've got the right range.
+        // Sort it, and output the lowest and highest numbers in the range.
+        if (Sum == InvalidNum)
+        {
+            printLowestAndHighestInRange(Back, Front);
+            return;
+        }
+    }
+}
+
 int main(int argc, char** argv)
 {
     readInput();
     int64_t InvalidNum = findFirstInvalidNumber();
     std::cout << "First invalid number is " << InvalidNum << std::endl;
+
+    findInvalidNumberComponents(InvalidNum);
 }
