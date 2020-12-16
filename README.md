@@ -15,6 +15,8 @@ result in refactors or simplifications in previous solutions.
   characters for the first few days.
 - Need to check that I've used `match[1].str()` everywhere necessary. Otherwise
   strange things appear to happen.
+- I think I've been using the wrong regex match type, which means that `Line.c_str()`
+  needed to be used - `regex::smatch` instead of `regex::cmatch`.
 - Need to check whether input stream is open with `ifs.fail()` as the cwd when
   run from within VSCode seems to be the workspace rather than the current file
   directory.
