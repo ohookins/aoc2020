@@ -52,7 +52,7 @@ std::pair<float, float> CalculateDestination(float Direction, float Distance)
     return {x, y};
 }
 
-void Navigate(const std::vector<std::pair<char, int>> NavigationData)
+void NavigatePart1(const std::vector<std::pair<char, int>> NavigationData)
 {
     // Consider 0,0 our origin
     float CurrentX = 0.0f, CurrentY = 0.0f;
@@ -63,7 +63,6 @@ void Navigate(const std::vector<std::pair<char, int>> NavigationData)
     // Iterate through instructions in the nav data
     for (const auto& [Instruction, Amount] : NavigationData)
     {
-        std::cout << "Location: (" << CurrentX << "," << CurrentY << ") Direction: " << Direction << std::endl;
         switch(Instruction)
         {
             case 'N':
@@ -80,6 +79,8 @@ void Navigate(const std::vector<std::pair<char, int>> NavigationData)
                 break;
             case 'L':
                 Direction += Amount;
+                // ensure angle is between 0 and 360
+                // although I'm not sure this is even necessary with the sin/cos functions
                 if (Direction >= 360.0f) Direction -= 360.0f;
                 break;
             case 'R':
@@ -94,7 +95,70 @@ void Navigate(const std::vector<std::pair<char, int>> NavigationData)
         }
     }
 
-    std::cout << "We ended up at (" << CurrentX << ", " << CurrentY << ")" << std::endl;
+    std::cout << "(Part1) We ended up at (" << CurrentX << ", " << CurrentY << ")" << std::endl;
+    std::cout << "Manhattan distance is: " << round(abs(CurrentX) + abs(CurrentY)) << std::endl << std::endl;
+}
+
+// rotate a point around the origin and mutate the coordinates in place
+void RotateAroundOrigin(float& OutWaypointX, float& OutWaypointY, const float Degrees)
+{
+    // calculate angle (in radians) and magnitude of existing vector
+    float Magnitude = sqrt(pow(OutWaypointX, 2) + pow(OutWaypointY, 2));
+    float Angle = atan(OutWaypointY / OutWaypointX);
+
+    // atan is limited to -90 to +90 degrees so correct it
+    if (OutWaypointX < 0.0f) Angle += M_PI;
+    else if (OutWaypointY < 0.0f) Angle += 2 * M_PI;
+    
+    // add rotation vector
+    Angle += DegreesToRadians(Degrees);
+
+    // move output coordinates based on new angle
+    OutWaypointX = round(cos(Angle) * Magnitude);
+    OutWaypointY = round(sin(Angle) * Magnitude);
+}
+
+void NavigatePart2(const std::vector<std::pair<char, int>> NavigationData)
+{
+    // The Ship's current location in world space
+    float CurrentX = 0.0f, CurrentY = 0.0f;
+
+    // Waypoint relative "transform" from the ship
+    float WaypointX = 10.0f, WaypointY = 1.0f;
+
+    // Iterate through instructions in the nav data
+    for (const auto& [Instruction, Amount] : NavigationData)
+    {
+        // std::cout << "Location: (" << CurrentX << "," << CurrentY << ") Waypoint: (";
+        // std::cout << WaypointX << "," << WaypointY << ") -> " << Instruction << Amount << std::endl;
+        switch(Instruction)
+        {
+            case 'N':
+                WaypointY += Amount;
+                break;
+            case 'S':
+                WaypointY -= Amount;
+                break;
+            case 'E':
+                WaypointX += Amount;
+                break;
+            case 'W':
+                WaypointX -= Amount;
+                break;
+            case 'L':
+                RotateAroundOrigin(WaypointX, WaypointY, Amount);
+                break;
+            case 'R':
+                RotateAroundOrigin(WaypointX, WaypointY, -Amount);
+                break;
+            case 'F':
+                CurrentX += WaypointX * Amount;
+                CurrentY += WaypointY * Amount;
+                break;
+        }
+    }
+
+    std::cout << "(Part2) We ended up at (" << CurrentX << ", " << CurrentY << ")" << std::endl;
     std::cout << "Manhattan distance is: " << round(abs(CurrentX) + abs(CurrentY)) << std::endl;
 }
 
@@ -107,5 +171,6 @@ int main(int argc, char** argv)
         NavigationData.push_back(ParseLine(Line));
     });
 
-    Navigate(NavigationData);
+    NavigatePart1(NavigationData);
+    NavigatePart2(NavigationData);
 }
