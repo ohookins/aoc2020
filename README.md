@@ -25,3 +25,9 @@ result in refactors or simplifications in previous solutions.
 - When deleting values from a data structure we're iterating through, do the
   dance of moving the iterator properly over the deleted value and onto the next
   one rather than breaking out of the loop and starting iteration again.
+- There's some weird interplay between the following lines that messes up the last
+  match in the line if the order is reversed:
+  ```
+        Buses.push_back(Match[1].str());
+        SearchString = Match.suffix();
+  ```
